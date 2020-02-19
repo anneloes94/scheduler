@@ -3,9 +3,9 @@ import "./DayListItem.scss";
 import classNames from "classnames"
 
 function formatSpots (spots) {
-  if (spots == 0) {
+  if (spots === 0) {
     return "no spots"
-  } else if (spots == 1) {
+  } else if (spots === 1) {
     return "1 spot"
   } else {
     return spots + " spots"
