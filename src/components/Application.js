@@ -82,8 +82,9 @@ const appointments = [
 
 export default function Application(props) {
   const [day, setDay] = useState("Monday")
-  const appointmentsList = appointments ? appointments.map(appointment => {
-  <Appointment key={appointment.id} {...appointment} />}) : [];
+  console.log({ appointments })
+  const appointmentsList = appointments ?
+    appointments.map(appointment => <Appointment key={appointment.id} {...appointment} />) : [];
   return (
     <main className="layout">
       <section className="sidebar">
