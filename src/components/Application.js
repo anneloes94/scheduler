@@ -1,28 +1,11 @@
 /* eslint-disable no-unused-expressions */
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 import "components/Application.scss";
 import DayList from "components/DayList"
 import Appointment from "./Appointment/index"
+import axios from "axios"
 
-
-const days = [
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2,
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5,
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0,
-  },
-];
 
 const appointments = [
   {
@@ -81,10 +64,19 @@ const appointments = [
 
 
 export default function Application(props) {
+  const [days, setDays] = useState([])
   const [day, setDay] = useState("Monday")
-  console.log({ appointments })
+  
   const appointmentsList = appointments ?
     appointments.map(appointment => <Appointment key={appointment.id} {...appointment} />) : [];
+
+  useEffect(() => {
+    axios
+    .get(`/api/days`)
+    .then(response => setDays(response))
+    .catch(error => console.log(error.response.status))
+  }, [])
+
   return (
     <main className="layout">
       <section className="sidebar">
