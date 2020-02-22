@@ -72,9 +72,13 @@ export default function Application(props) {
 
   useEffect(() => {
     axios
-    .get(`/api/days`)
-    .then(response => setDays(response))
-    .catch(error => console.log(error.response.status))
+    .get("api/days")
+    .then(response => {
+      setDays(response)
+    console.log(response)})
+    .catch(error => {
+      console.log(error.response.status)
+      console.log(error.response)})
   }, [])
 
   return (
