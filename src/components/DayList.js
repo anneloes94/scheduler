@@ -4,10 +4,11 @@ import "components/Button.scss";
 import DayListItem from "./DayListItem"
 
 export default function DayList(props) {
-  const days = props.days ? props.days.map((day) => <DayListItem id={day.id} name={day.name} spots={day.spots} selected={day.name === props.day} setDay={props.setDay} /> ) : [];
+  const listedDays = props.days ? props.days.map((day) => <DayListItem id={day.id} name={day.name} spots={day.spots} selected={day.name === props.day} setDay={props.setDay} /> ) : [];
+  console.log(listedDays)
   return (
     <ul>
-      {days}
+      {listedDays}
     </ul>
   )
 }

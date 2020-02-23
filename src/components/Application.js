@@ -1,85 +1,31 @@
 /* eslint-disable no-unused-expressions */
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import "components/Application.scss";
 import DayList from "components/DayList"
 import Appointment from "./Appointment/index"
 import axios from "axios"
 
-
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 3,
-    time: "3pm",
-    interview: {
-      student: "Bob Bobberson",
-      interviewer: {
-        id: 4,
-        name: "Cohana Roy",
-        avatar: "https://i.imgur.com/FK8V841.jpg",
-      }
-    }
-  },
-  {
-    id: 4,
-    time: "4pm",
-    interview: {
-      student: "Tim Timmerson",
-      interviewer: {
-        id: 5,
-        name: "Sven Jones",
-        avatar: "https://i.imgur.com/twYrpay.jpg",
-      }
-    }
-  },
-  {
-    id: 5,
-    time: "11am",
-    interview: {
-      student: "John Johnnerson",
-      interviewer: {
-        id: 5,
-        name: "Sven Jones",
-        avatar: "https://i.imgur.com/twYrpay.jpg",
-      }
-    }
-  }
-];
-
-
 export default function Application(props) {
-  const [days, setDays] = useState([])
-  const [day, setDay] = useState("Monday")
-  
-  const appointmentsList = appointments ?
-    appointments.map(appointment => <Appointment key={appointment.id} {...appointment} />) : [];
+  const [state, setState] = useState({
+    day: "Monday",
+    days: [],
+    appointments: {}
+  });
+  const setDay = day => setState({ ...state, day });
+  const setDays = days => setState(prev => ({ ...prev, days }));
 
-  useEffect(() => {
-    axios
-    .get("api/days")
-    .then(response => {
-      setDays(response)
-    console.log(response)})
-    .catch(error => {
-      console.log(error.response.status)
-      console.log(error.response)})
-  }, [])
+  Promise.all([
+    Promise.resolve(axios.get("http://localhost:8001/api/days")),
+    Promise.resolve(axios.get("/api/appointments")),
+    Promise.resolve(axios.get("/api/interviewers"))
+  ]).then((all) => {
+    setState(prev => ({ days: all[0], appointments: all[1], interviewers: all[2] }));
+  });
+
+  console.log(state)
+
+  const appointmentsList = state.appointments ? Object.keys(state.appointments).map(appointmentId => <Appointment key={appointmentId} {...state.appointments[appointmentId]} />) : [];
 
   return (
     <main className="layout">
@@ -92,8 +38,8 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
           <DayList
-            days={days}
-            day={day}
+
+            day={state.day}
             setDay={setDay}
           />
         </nav>
