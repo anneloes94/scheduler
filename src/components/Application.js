@@ -4,7 +4,9 @@ import React, { useState, useEffect } from "react";
 import "components/Application.scss";
 import DayList from "components/DayList"
 import Appointment from "./Appointment/index"
-import axios from "axios"
+import getAppointmentsForDay from "../helpers/selectors"
+import axios from "axios";
+import useVisualMode from "../hooks/useVisualMode"
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -23,10 +25,21 @@ export default function Application(props) {
     setState(prev => ({ days: all[0], appointments: all[1], interviewers: all[2] }));
   });
 
-  console.log(state)
+  const appointments = getAppointmentsForDay(state, day);
 
-  const appointmentsList = state.appointments ? Object.keys(state.appointments).map(appointmentId => <Appointment key={appointmentId} {...state.appointments[appointmentId]} />) : [];
-
+  const schedule = appointments.map((appointment) => {
+    const interview = getInterview(state, appointment.interview);
+  
+    return (
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+      />
+    );
+  });
+  
   return (
     <main className="layout">
       <section className="sidebar">
