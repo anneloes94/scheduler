@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import "components/Application.scss";
 import DayList from "components/DayList"
 import Appointment from "./Appointment/index"
-import getAppointmentsForDay from "../helpers/selectors"
+import { getAppointmentsForDay, getInterviewersForDay } from "../helpers/selectors"
 import axios from "axios";
 import useVisualMode from "../hooks/useVisualMode"
 

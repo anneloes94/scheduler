@@ -8,7 +8,6 @@ import useVisualMode from "../../hooks/useVisualMode"
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE"
-props.interviewers = []
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
