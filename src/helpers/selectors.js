@@ -1,24 +1,16 @@
 function getAppointmentsForDay(state, day) {
-  const appointmentsDay = (() => state.days.find(stateDay => stateDay.name === day))
-
-  if (state.days && state.days.length > 0) {
-    return (state.days[0].appointments.map(
-      appointmentId => state.appointments[appointmentId.toString()]))
-  }
-
-  
+  const appointmentsDay = ( state.days.find(stateDay => stateDay.name === day)) 
 
   if (!appointmentsDay || appointmentsDay.length === 0) {
-    console.log("I will return empty")
     return []
   } else {
-    console.log("I may be the solution?")
-    return (appointmentsDay[0].appointments.map(
+    return (appointmentsDay.appointments.map(
       appointmentId => state.appointments[appointmentId.toString()]))
   }
 }
 
 function getInterviewersForDay(state, day) {
+  console.log("I am going to getAppointmentsForDay now")
   const appointments = getAppointmentsForDay(state, day)
 
   let interviews = (appointments.map(appointment => appointment.interview)).filter(Boolean)
@@ -26,8 +18,15 @@ function getInterviewersForDay(state, day) {
   return interviews.map(interview => state.interviewers[interview.interviewer])
 }
 
-function getInterview() {
-  return 
+function getInterview(state, interview) {
+  if (interview === null) {
+    return null
+  } else {
+    return {
+    ...interview,
+    interviewer: state.interviewers[interview.interviewer]
+    }
+  }
 }
 
-export { getAppointmentsForDay, getInterviewersForDay, getInterview}
+export { getAppointmentsForDay, getInterviewersForDay, getInterview }
