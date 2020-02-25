@@ -8,7 +8,7 @@ export default function Form (props) {
 
   const cancel = () => {
     return (
-    name && setName("") || interviewer && setInterviewer(null)
+    (name && setName("")) || (interviewer && setInterviewer(null))
     )
   }
   return (

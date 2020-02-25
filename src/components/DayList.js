@@ -4,8 +4,14 @@ import "components/Button.scss";
 import DayListItem from "./DayListItem"
 
 export default function DayList(props) {
-  const listedDays = props.days ? props.days.map((day) => <DayListItem id={day.id} name={day.name} spots={day.spots} selected={day.name === props.day} setDay={props.setDay} /> ) : [];
-  console.log(listedDays)
+  const listedDays = props.days.map(day => {
+    return (<DayListItem
+      key={day.id}
+      name={day.name}
+      spots={day.spots}
+      selected={day.name === props.day} //props.value
+      setDay={() => props.setDay(day.name)} />)
+  })
   return (
     <ul>
       {listedDays}
