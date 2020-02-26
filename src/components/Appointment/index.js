@@ -28,7 +28,8 @@ export default function Appointment(props) {
     };
 
     props.bookInterview(props.id, interview)
-    transition(SHOW) // async once with db
+    .then(transition(SHOW)) // async once with db
+    // .then()        should I be setting state here again?
   }
 
 

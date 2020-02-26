@@ -42,10 +42,8 @@ export default function Application(props) {
       ...state,
       appointments
     });
-    // return fetch('/api/appointments/:id', {
-    //     method: 'PUT',
-    //     body: formData
-    // }).then(response => response.json())
+    return axios.put(`api/appointments/${id}`, appointment)
+    .then(setState())
   }
 
   const appointments = getAppointmentsForDay(state, state.day).map((event) => {
