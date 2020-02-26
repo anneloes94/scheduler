@@ -1,9 +1,10 @@
-import React, {useState} from "react"
+import React from "react"
 import "./styles.scss"
 import Header from "./Header"
 import Show from "./Show"
 import Empty from "./Empty"
 import Form from "./Form"
+import Status from "./Status"
 import useVisualMode from "../../hooks/useVisualMode"
 
 
@@ -11,6 +12,7 @@ const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const EDIT = "EDIT";
+const SAVING = "SAVING"
 
 
 
@@ -19,50 +21,53 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
-  
   function save(name, interviewer) {
     const interview = {
       student: name,
       interviewer
     };
+
     props.bookInterview(props.id, interview)
-      transition(SHOW) // async once with db
+    transition(SHOW) // async once with db
   }
 
-  
+
   return (
-  <article className="appointment" key={props.id}>
-    <Header time={props.time}> </Header>
+    <article className="appointment" key={props.id}>
+      <Header time={props.time}> </Header>
 
-    {mode === EMPTY &&
-      <Empty onAdd={() => transition(CREATE)} />}
+      {mode === EMPTY &&
+        <Empty onAdd={() => transition(CREATE)} />}
 
-    {mode === CREATE &&
-      <Form
-        name={""}
-        interviewer={""}
-        onCancel={() => back()}
-        interviewers={props.interviewers}
-        onSave={save}
-      />
-    }
-    {mode === EDIT &&
-      <Form
-        name={props.interview.student}
-        interviewer={props.interview.interviewer}
-        onCancel={() => back()}
-        interviewers={props.interviewers}
-        onSave={save}
-      />
-    }
-    {mode === SHOW && 
-      <Show
-        student={props.interview.student}
-        interviewer={props.interview.interviewer.name}
-        onEdit={() => transition(EDIT)}
+      {mode === CREATE &&
+        <Form
+          name={""}
+          interviewer={""}
+          onCancel={() => back()}
+          interviewers={props.interviewers}
+          onSave={save}
+        />
+      }
+      {mode === EDIT &&
+        <Form
+          name={props.interview.student}
+          interviewer={props.interview.interviewer}
+          onCancel={() => back()}
+          interviewers={props.interviewers}
+          onSave={save}
+        />
+      }
+      {console.log(props, "props in show")}
+    {mode === SHOW &&
+
+        <Show
+          student={props.interview.student}
+          interviewer={props.interview.interviewer.name || null}
+          interviewers={props.interviewers}
+          onEdit={() => transition(EDIT)}
         // onDelete={() => transition(CONFIRM)}
-      />
-    }
-  </article>
+        />
+      }
+    </article>
   )
 }

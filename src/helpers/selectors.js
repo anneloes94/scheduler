@@ -10,12 +10,13 @@ function getAppointmentsForDay(state, day) {
 }
 
 function getInterviewersForDay(state, day) {
-  console.log("I am going to getAppointmentsForDay now")
-  const appointments = getAppointmentsForDay(state, day)
-
-  let interviews = (appointments.map(appointment => appointment.interview)).filter(Boolean)
-
-  return interviews.map(interview => state.interviewers[interview.interviewer])
+  let result = []
+  console.log(state.days)
+  const currentDay = state.days.filter(stateDay => stateDay.name === day)[0]
+  console.log(currentDay)
+  result = currentDay.interviewers.map(interviewerId => state.interviewers[interviewerId])
+  console.log(result, "resl")
+  return result
 }
 
 function getInterview(state, interview) {

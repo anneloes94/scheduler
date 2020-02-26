@@ -11,7 +11,8 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: {}
+    appointments: {},
+    interviewers: []
   });
   const setDay = day => setState({ ...state, day });
 
@@ -24,7 +25,7 @@ export default function Application(props) {
       .then((all) => {
         setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
       })
-      .catch((error) => console.log("Boooo", error))
+      .catch((error) => console.log("You do not wanna be seeing this error!", error))
   }, [])
 
   function bookInterview(id, interview) {
@@ -41,9 +42,12 @@ export default function Application(props) {
       ...state,
       appointments
     });
+    // return fetch('/api/appointments/:id', {
+    //     method: 'PUT',
+    //     body: formData
+    // }).then(response => response.json())
   }
 
-  const interviewers = getInterviewersForDay(state, state.day)
   const appointments = getAppointmentsForDay(state, state.day).map((event) => {
     const interview = getInterview(state, event.interview)
 
@@ -53,7 +57,7 @@ export default function Application(props) {
         id={event.id}
         time={event.time}
         interview={interview}
-        interviewers={interviewers}
+        interviewers={getInterviewersForDay(state, state.day)}
         bookInterview={bookInterview}
       />
     );
