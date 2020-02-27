@@ -43,7 +43,6 @@ export default function Application(props) {
       appointments
     });
     return axios.put(`api/appointments/${id}`, appointment)
-    // .then(setState())    see 
   }
 
   const cancelInterview = (id) => {
@@ -59,9 +58,6 @@ export default function Application(props) {
       ...state,
       appointments})
     return axios.delete(`api/appointments/${id}`)
-    
-      // .then(() => {
-
   }
 
   const appointments = getAppointmentsForDay(state, state.day).map((event) => {

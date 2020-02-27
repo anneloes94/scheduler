@@ -7,6 +7,7 @@ import Form from "./Form"
 import Status from "./Status"
 import useVisualMode from "../../hooks/useVisualMode"
 import Error from "./Error"
+import Confirm from "./Confirm"
 
 
 const EMPTY = "EMPTY";
@@ -16,6 +17,7 @@ const EDIT = "EDIT";
 const SAVING = "SAVING"
 const ERROR_SAVE = "ERROR_SAVE"
 const DELETE = "DELETE"
+const ERROR_DELETE = "ERROR_DELETE"
 const CONFIRM = "CONFIRM"
 
 
@@ -37,14 +39,16 @@ export default function Appointment(props) {
     .catch(error => transition(ERROR_SAVE, true));
   }
 
-  function deleteApt() {
-    const interview = null
-    transition(DELETE)
-    console.log(props.id, "props id")
-    props.cancelInterview(props.id)
+  function confirmDelete() {
+    transition(CONFIRM, true);
+  }
 
-    .then(() => console.log("Deleting in index!"))
-    .then(transition(EMPTY))
+  function deleteApt() {
+    transition(DELETE, true);
+    props
+      .cancelInterview(props.id)
+      .then(() => transition(EMPTY))
+      .catch(error => transition(ERROR_DELETE, true));
   }
 
 
@@ -74,24 +78,33 @@ export default function Appointment(props) {
         />
       }
 
-    {mode === SHOW &&
-
+      {mode === SHOW &&
         <Show
           student={props.interview.student || null}
           interviewer={props.interview.interviewer.name || null}
           interviewers={props.interviewers}
           onEdit={() => transition(EDIT)}
-          onDelete={deleteApt}
+          onDelete={confirmDelete}
         />
       }
       {mode === SAVING &&
         <Status message={"Saving"} />
       }
       {mode === ERROR_SAVE &&
-        <Error message={"An error occured while saving your appointment"} />
+        <Error message={"An error occurred while saving your appointment"} />
       }
       {mode === DELETE &&
         <Status message={"Deleting"} />
+      }
+      {mode === CONFIRM &&
+        <Confirm
+          message={'Are you sure you want to delete this appointment?'}
+          onConfirm={() => deleteApt()}
+          onCancel={() => back()}
+        />
+      }
+      {mode === ERROR_DELETE &&
+        <Error message={"An error occurred while deleting your appointment"} />
       }
     </article>
   )
