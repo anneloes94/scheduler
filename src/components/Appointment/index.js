@@ -34,13 +34,8 @@ export default function Appointment(props) {
     }
     transition(SAVING)
     props.bookInterview(props.id, interview)
-    
-    .then(() => transition(SHOW))
-    .catch(error => transition(ERROR_SAVE, true));
-  }
-
-  function confirmDelete() {
-    transition(CONFIRM, true);
+      .then(() => transition(SHOW))
+      .catch(error => transition(ERROR_SAVE, true));
   }
 
   function deleteApt() {
@@ -50,7 +45,6 @@ export default function Appointment(props) {
       .then(() => transition(EMPTY))
       .catch(error => transition(ERROR_DELETE, true));
   }
-
 
   return (
     <article className="appointment" key={props.id}>
@@ -72,7 +66,7 @@ export default function Appointment(props) {
         <Form
           name={props.interview.student}
           interviewer={props.interview.interviewer}
-          onCancel={() => back()}
+          onCancel={() => back()}  //works
           interviewers={props.interviewers}
           onSave={save}
         />
@@ -80,18 +74,21 @@ export default function Appointment(props) {
 
       {mode === SHOW &&
         <Show
-          student={props.interview.student || null}
-          interviewer={props.interview.interviewer.name || null}
+          student={props.interview.student}
+          interviewer={props.interview.interviewer}
           interviewers={props.interviewers}
           onEdit={() => transition(EDIT)}
-          onDelete={confirmDelete}
+          onDelete={() => transition(CONFIRM)}
         />
       }
       {mode === SAVING &&
         <Status message={"Saving"} />
       }
       {mode === ERROR_SAVE &&
-        <Error message={"An error occurred while saving your appointment"} />
+        <Error 
+          message={"An error occurred while saving your appointment"}
+          onClose={() => back()} 
+        />
       }
       {mode === DELETE &&
         <Status message={"Deleting"} />
@@ -100,11 +97,14 @@ export default function Appointment(props) {
         <Confirm
           message={'Are you sure you want to delete this appointment?'}
           onConfirm={() => deleteApt()}
-          onCancel={() => back()}
+          onCancel={() => back()} // does not work
         />
       }
       {mode === ERROR_DELETE &&
-        <Error message={"An error occurred while deleting your appointment"} />
+        <Error 
+          message={"An error occurred while deleting your appointment"} 
+          onClose={() => back()} // does not work
+          />
       }
     </article>
   )
