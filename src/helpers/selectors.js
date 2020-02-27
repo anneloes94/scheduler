@@ -11,11 +11,8 @@ function getAppointmentsForDay(state, day) {
 
 function getInterviewersForDay(state, day) {
   let result = []
-  console.log(state.days)
   const currentDay = state.days.filter(stateDay => stateDay.name === day)[0]
-  console.log(currentDay)
   result = currentDay.interviewers.map(interviewerId => state.interviewers[interviewerId])
-  console.log(result, "resl")
   return result
 }
 
