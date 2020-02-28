@@ -34,8 +34,11 @@ export default function Appointment(props) {
     }
     transition(SAVING)
     props.bookInterview(props.id, interview)
-      .then(() => transition(SHOW))
-      .catch(error => transition(ERROR_SAVE, true));
+      .then(() => transition(SHOW, true))
+      .catch(error => {
+        console.log(error)
+        transition(ERROR_SAVE, true)
+      });
   }
 
   function deleteApt() {
