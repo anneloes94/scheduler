@@ -1,43 +1,54 @@
-import React from "react"
-import "./styles.scss"
-import Header from "./Header"
-import Show from "./Show"
-import Empty from "./Empty"
-import Form from "./Form"
-import Status from "./Status"
-import useVisualMode from "../../hooks/useVisualMode"
-import Error from "./Error"
-import Confirm from "./Confirm"
+/*
+This is where the Appointment component is created. 
+It takes in props from  
+*/
 
+import React from "react";
+import "./styles.scss";
+import Header from "./Header";
+import Show from "./Show";
+import Empty from "./Empty";
+import Form from "./Form";
+import Status from "./Status";
+import useVisualMode from "../../hooks/useVisualMode";
+import Error from "./Error";
+import Confirm from "./Confirm";
+import useApplicationData from "../../hooks/useApplicationData";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const EDIT = "EDIT";
-const SAVING = "SAVING"
-const ERROR_SAVE = "ERROR_SAVE"
-const DELETE = "DELETE"
-const ERROR_DELETE = "ERROR_DELETE"
-const CONFIRM = "CONFIRM"
-
-
+const SAVING = "SAVING";
+const ERROR_SAVE = "ERROR_SAVE";
+const DELETE = "DELETE";
+const ERROR_DELETE = "ERROR_DELETE";
+const CONFIRM = "CONFIRM";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
 
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
+
   function save(name, interviewer) {
     const interview = {
       student: name,
       interviewer
-    }
-    transition(SAVING)
-    props.bookInterview(props.id, interview)
+    };
+    transition(SAVING);
+    props
+      .bookInterview(props.id, interview)
       .then(() => transition(SHOW, true))
       .catch(error => {
-        console.log(error)
-        transition(ERROR_SAVE, true)
+        console.log(error);
+        transition(ERROR_SAVE, true);
       });
   }
 
@@ -53,10 +64,9 @@ export default function Appointment(props) {
     <article className="appointment" key={props.id}>
       <Header time={props.time}> </Header>
 
-      {mode === EMPTY &&
-        <Empty onAdd={() => transition(CREATE)} />}
+      {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
 
-      {mode === CREATE &&
+      {mode === CREATE && (
         <Form
           name={""}
           interviewer={""}
@@ -64,18 +74,18 @@ export default function Appointment(props) {
           interviewers={props.interviewers}
           onSave={save}
         />
-      }
-      {mode === EDIT &&
+      )}
+      {mode === EDIT && (
         <Form
           name={props.interview.student}
           interviewer={props.interview.interviewer}
-          onCancel={() => back()}  //works
+          onCancel={() => back()} //works
           interviewers={props.interviewers}
           onSave={save}
         />
-      }
+      )}
 
-      {mode === SHOW &&
+      {mode === SHOW && (
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
@@ -83,32 +93,28 @@ export default function Appointment(props) {
           onEdit={() => transition(EDIT)}
           onDelete={() => transition(CONFIRM)}
         />
-      }
-      {mode === SAVING &&
-        <Status message={"Saving"} />
-      }
-      {mode === ERROR_SAVE &&
-        <Error 
+      )}
+      {mode === SAVING && <Status message={"Saving"} />}
+      {mode === ERROR_SAVE && (
+        <Error
           message={"An error occurred while saving your appointment"}
-          onClose={() => back()} 
+          onClose={() => back()}
         />
-      }
-      {mode === DELETE &&
-        <Status message={"Deleting"} />
-      }
-      {mode === CONFIRM &&
+      )}
+      {mode === DELETE && <Status message={"Deleting"} />}
+      {mode === CONFIRM && (
         <Confirm
-          message={'Are you sure you would like to delete?'}
+          message={"Are you sure you would like to delete?"}
           onConfirm={() => deleteApt()}
           onCancel={() => back()} // does not work
         />
-      }
-      {mode === ERROR_DELETE &&
-        <Error 
-          message={"An error occurred while deleting your appointment"} 
+      )}
+      {mode === ERROR_DELETE && (
+        <Error
+          message={"An error occurred while deleting your appointment"}
           onClose={() => back()} // does not work
-          />
-      }
+        />
+      )}
     </article>
-  )
+  );
 }

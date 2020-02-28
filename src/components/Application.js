@@ -7,13 +7,16 @@ This is where the main Application gets painted. It consists of:
 
 import React, { useState, useEffect } from "react";
 import "components/Application.scss";
-import DayList from "components/DayList"
-import Appointment from "./Appointment/index"
-import { getAppointmentsForDay, getInterviewersForDay, getInterview } from "../helpers/selectors"
-import useApplicationData from "../hooks/useApplicationData.js"
+import DayList from "components/DayList";
+import Appointment from "./Appointment/index";
+import {
+  getAppointmentsForDay,
+  getInterviewersForDay,
+  getInterview
+} from "../helpers/selectors";
+import useApplicationData from "../hooks/useApplicationData.js";
 
 export default function Application(props) {
-  
   const {
     state,
     setDay,
@@ -21,8 +24,8 @@ export default function Application(props) {
     cancelInterview
   } = useApplicationData();
 
-  const appointments = getAppointmentsForDay(state, state.day).map((event) => {
-    const interview = getInterview(state, event.interview)
+  const appointments = getAppointmentsForDay(state, state.day).map(event => {
+    const interview = getInterview(state, event.interview);
 
     return (
       <Appointment
