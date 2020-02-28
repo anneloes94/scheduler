@@ -1,5 +1,5 @@
 function getAppointmentsForDay(state, day) {
-  const appointmentsDay = ( state.days.find(stateDay => stateDay.name === day)) 
+  const appointmentsDay = state.days.find(stateDay => stateDay.name === day)
 
   if (!appointmentsDay || appointmentsDay.length === 0) {
     return []
