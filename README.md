@@ -39,5 +39,3 @@ npm test
 ```sh
 npm run storybook
 ```
-(url)[https://raw.githubusercontent.com/anneloes94/scheduler/master/docs/Scheduler_general.png]
-(url2)[https://raw.githubusercontent.com/anneloes94/scheduler/master/docs/Scheduler_Form.png]
