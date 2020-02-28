@@ -29,7 +29,6 @@ export default function InterviewerList(props) {
   
   return (
     <section className="interviewers">
-      {console.log(interviewers)}
       <h4 className="interviewers__header text--light">
         Interviewer
       </h4>
