@@ -1,6 +1,6 @@
 import React from "react";
 
-import { render, cleanup, waitForElement, getByText, prettyDOM, getAllByTestId, getByAltText, getByPlaceholderText, queryByText } from "@testing-library/react";
+import { render, cleanup, waitForElement, getByText, prettyDOM, getAllByTestId, getByAltText, getByPlaceholderText, queryByText, getByTestId, getByDisplayValue } from "@testing-library/react";
 
 import Application from "components/Application";
 import { fireEvent } from "@testing-library/react/dist";
@@ -51,7 +51,7 @@ describe("Application", () => {
     expect(getByText(day, "no spots remaining")).toBeInTheDocument();
   })
 
-  it.("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
+  it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
     //NOTE: does NOT work when other tests are run, since they change the amount of spots available
     // 1. Render the Application.
     const { container, debug } = render(<Application />);
@@ -62,12 +62,6 @@ describe("Application", () => {
     // 3. Click the "Delete" button on the booked appointment.
     const appointments = getAllByTestId(container, "appointment");
     const appointment = appointments[1];
-
-    const day1 = getAllByTestId(container, "day").find(day =>
-      queryByText(day, "Monday")
-    );
-
-    console.log(prettyDOM(day1))
 
     fireEvent.click(getByAltText(appointment, "Delete"))
     
@@ -82,7 +76,6 @@ describe("Application", () => {
     
     // 7. Wait until the element with the "Add" button is displayed.
     await waitForElement(() => getByAltText(appointment, "Add"));
-    debug(appointment)
 
     // 8. Check that the DayListItem with the text "Monday" also has the text "2 spots remaining".
     const day = getAllByTestId(container, "day").find(day =>
@@ -93,5 +86,44 @@ describe("Application", () => {
 
     expect(getByText(day, "2 spots remaining")).toBeInTheDocument();
   });
+
+  it.only("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {
+    // 1. Render the Application.
+    const { container, debug } = render(<Application />);
+
+    // 2. Wait until the text "Archie Cohen" is displayed.
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+
+    // 3. Click the "Edit" button on the booked appointment.
+    const appointments = getAllByTestId(container, "appointment");
+    const appointment = appointments[1];
+
+    fireEvent.click(getByAltText(appointment, "Edit"))
+    
+    // 4. Check that the confirmation message is shown.
+    expect(getByTestId(appointment, "student-name-input")).toHaveValue("Archie Cohen")
+
+    // 5. Change student name to "Archald Nohan"
+    debug(appointment)
+    fireEvent.change(getByDisplayValue(appointment, "Archie Cohen"), {
+      target: { value: "Archald Nohan" }
+    });
+
+    // 6. Click the "Save" button on the confirmation.
+    fireEvent.click(getByText(appointment, "Save"));
+    expect(getByText(appointment, "Saving")).toBeInTheDocument(); 
+    
+    // 7. Wait until the element with the "Add" button is displayed.
+    await waitForElement(() => getByText(appointment, "Archald Nohan"));
+
+    // 8. Check that the DayListItem with the text "Monday" also has the text "2 spots remaining".
+    const day = getAllByTestId(container, "day").find(day =>
+      queryByText(day, "Monday")
+    ); 
+
+    await waitForElement(() => getByText(day, "2 spots remaining"));
+
+    expect(getByText(day, "2 spots remaining")).toBeInTheDocument();
+  })
   
 })
