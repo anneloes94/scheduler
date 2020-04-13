@@ -8,11 +8,12 @@ import { fireEvent } from "@testing-library/react/dist";
 // for save error mock:
 import axios from "axios";
 
-afterEach(cleanup);
 
 // NOTE: test a test separately by changing ".skip" into ".only", so that the other test cases do not interfere with the one being tested
 
 describe("Application", () => {
+  afterEach(cleanup);
+
   it("defaults to Monday and changes the schedule when a new day is selected", () => {
     const { getByText } = render(<Application />);
 
@@ -86,9 +87,9 @@ describe("Application", () => {
       queryByText(day, "Monday")
     );
 
-    await waitForElement(() => getByText(day, "2 spots remaining"));
+    await waitForElement(() => getByText(day, "1 spot remaining"));
 
-    expect(getByText(day, "2 spots remaining")).toBeInTheDocument();
+    expect(getByText(day, "1 spot remaining")).toBeInTheDocument();
   });
 
   it("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {

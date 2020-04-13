@@ -47,7 +47,6 @@ export default function Appointment(props) {
       .bookInterview(props.id, interview)
       .then(() => transition(SHOW, true))
       .catch(error => {
-        console.log(error);
         transition(ERROR_SAVE, true);
       });
   }
