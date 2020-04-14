@@ -2,7 +2,9 @@
 
 Interview Scheduler is a one-page web application built in ReactJS. It allows students to schedule an appointment with an interviewer in a calendar style structure.
 
-Interview Scheduler allows users to book an appointment only with interviewers available for that day. A user can create, edit and delete an appointment. 
+Interview Scheduler allows users to book an appointment only with interviewers available for that day. A user can create, edit and delete an appointment.
+
+Visit the webpage [here](https://scheduler-lh.netlify.com/).
 
 ## Final product
 
